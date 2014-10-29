@@ -1,13 +1,24 @@
-name: java8-oracle
+name: java8-oracle-nodejs
 version: 0.0.1
-description: Java8 box provisioned with the Oracle distribution via the webupd8team ppa. Comes with maven, ant and gradle 
-keywords:
-  - java
-  - ant
-  - maven
-  - oracle
+inherits: wercker/ubuntu12.04-nodejs0.10@1.2.0
 type: main
 os: ubuntu@12.04
+description: Java8 box provisioned with the Oracle distribution via the webupd8team ppa. Comes with maven and node
+keywords:
+  - java
+  - maven
+  - oracle
+  - nodejs
+  - compass
+  - yeoman
+  - grunt
+  - bower
+  - phantomjs
+  - karma
+packages:
+  - nodejs@0.10.29
+  - phantomjs@1.9.7
+  - compass@3.2.14
 env:
   SBT_OPTS: -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M
   IVY_CACHE_DIR: '"$WERCKER_CACHE_DIR/ivy"'
@@ -24,15 +35,27 @@ script: |-
   # Install maven
   sudo apt-get install maven
 
-  # Install Gradle
-  sudo add-apt-repository ppa:cwchien/gradle -y
-  sudo apt-get update
-  sudo apt-get install gradle -y
-
-  # Install ant
-  sudo apt-get install ant ant-contrib ivy ivy-doc -y -qq
-
-   # We should have ant and ivy available
-  type ant || { echo "I expected ant to be available. Aborting."; exit 1; }
+  # We should have ant and ivy available
   type mvn || { echo "I expected maven to be available. Aborting."; exit 1; }
-  type gradle || { echo "No gradle command found...aborting"; exit 1; }
+  #type gradle || { echo "No gradle command found...aborting"; exit 1; }
+
+  # remove the default installed optipng as it is too old
+  sudo apt-get remove optipng
+  sudo apt-get update
+  # compass
+  sudo gem install compass
+  # node.js
+  sudo npm cache clean -f
+  sudo npm install -g n
+  sudo n stable
+  node -v
+  # bower global, so you dont need to change the package.json
+  sudo npm install -g bower
+  # phantomjs
+  export PHANTOM_VERSION=1.9.7
+  wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-$PHANTOM_VERSION-linux-x86_64.tar.bz2
+  tar xfj phantomjs-$PHANTOM_VERSION-linux-x86_64.tar.bz2
+  sudo cp phantomjs-$PHANTOM_VERSION-linux-x86_64/bin/phantomjs /usr/local/bin
+  # yeoman
+  sudo apt-get install -y libqt4-dev qt4-qmake
+  sudo npm install -g yo
