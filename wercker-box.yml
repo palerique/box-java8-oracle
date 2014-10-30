@@ -3,7 +3,7 @@ version: 0.0.3
 inherits: wercker/ubuntu12.04-nodejs0.10@1.2.0
 type: main
 os: ubuntu@12.04
-description: Java8 box provisioned with the Oracle distribution via the webupd8team ppa. Comes with maven and node
+description: Java8 box provisioned with the Oracle distribution via the webupd8team ppa. Comes with maven, nodejs, compass, yeoman, grunt, bower, phantomjs, karma, selenium, firefox and xvfb
 keywords:
   - java
   - maven
@@ -15,6 +15,9 @@ keywords:
   - bower
   - phantomjs
   - karma
+  - selenium
+  - firefox
+  - xvfb
 packages:
   - nodejs@0.10.29
   - phantomjs@1.9.7
@@ -22,6 +25,7 @@ packages:
 env:
   SBT_OPTS: -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M
   IVY_CACHE_DIR: '"$WERCKER_CACHE_DIR/ivy"'
+  DISPLAY: :99
 script: |-
   # Install Java 8 
   sudo apt-get update
@@ -37,31 +41,42 @@ script: |-
 
   # We should have ant and ivy available
   type mvn || { echo "I expected maven to be available. Aborting."; exit 1; }
-  #type gradle || { echo "No gradle command found...aborting"; exit 1; }
 
   # remove the default installed optipng as it is too old
   sudo apt-get remove optipng
   sudo apt-get update
+
   # compass
   sudo gem install compass
+ 
   # node.js
   sudo npm cache clean -f
   sudo npm install -g n
   sudo n stable
 
-  #Reclaim ownership of the npm and node directory:
+  #Reclaim ownership of the npm and node directory
   sudo chown -R `whoami` /usr/local/lib/node_modules
   sudo chown -R `whoami` ~/.npm
   sudo chown -R `whoami` /home/ubuntu/.npm/
-
+  
+  #Node version
   node -v
+
   # bower global, so you dont need to change the package.json
   sudo npm install -g bower
+
   # phantomjs
   export PHANTOM_VERSION=1.9.7
   wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-$PHANTOM_VERSION-linux-x86_64.tar.bz2
   tar xfj phantomjs-$PHANTOM_VERSION-linux-x86_64.tar.bz2
   sudo cp phantomjs-$PHANTOM_VERSION-linux-x86_64/bin/phantomjs /usr/local/bin
+
   # yeoman
   sudo apt-get install -y libqt4-dev qt4-qmake
   sudo npm install -g yo
+
+  # Firefox webdriver and Xvfb
+  sudo apt-get install -y install xvfb firefox
+
+  #Start Xvfb
+  Xvfb :99
