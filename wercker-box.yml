@@ -1,5 +1,5 @@
 name: java8-oracle-nodejs
-version: 0.0.5
+version: 0.0.6
 inherits: wercker/ubuntu12.04-nodejs0.10@1.2.0
 type: main
 os: ubuntu@12.04
@@ -25,7 +25,6 @@ packages:
 env:
   SBT_OPTS: -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M
   IVY_CACHE_DIR: '"$WERCKER_CACHE_DIR/ivy"'
-  DISPLAY: :99
 script: |-
   # Install Java 8 
   sudo apt-get update
@@ -77,3 +76,8 @@ script: |-
 
   # Firefox webdriver and Xvfb
   sudo apt-get install -y xvfb firefox
+
+  # Setup Xvfb
+  export DISPLAY=:99.0
+  sudo start-stop-daemon --start --quiet --pidfile /tmp/xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1024x768x24 -ac +extension GLX +render -noreset
+  sleep 5
