@@ -1,5 +1,5 @@
 name: java8-oracle-nodejs
-version: 0.0.2
+version: 0.0.3
 inherits: wercker/ubuntu12.04-nodejs0.10@1.2.0
 type: main
 os: ubuntu@12.04
@@ -52,6 +52,7 @@ script: |-
   #Reclaim ownership of the npm and node directory:
   sudo chown -R `whoami` /usr/local/lib/node_modules
   sudo chown -R `whoami` ~/.npm
+  sudo chown -R `whoami` /home/ubuntu/.npm/
 
   node -v
   # bower global, so you dont need to change the package.json
