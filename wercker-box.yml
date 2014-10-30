@@ -76,7 +76,7 @@ script: |-
   sudo npm install -g yo
 
   # Firefox webdriver and Xvfb
-  sudo apt-get install -y install xvfb firefox
+  sudo apt-get install -y xvfb firefox
 
   #Start Xvfb
   Xvfb :99
