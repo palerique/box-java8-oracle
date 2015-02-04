@@ -65,7 +65,7 @@ script: |-
   sudo npm install -g bower
   
   # grunt
-  sudo npm install -g yo grunt grunt-cli
+  sudo npm install -g grunt grunt-cli
 
   # phantomjs
   export PHANTOM_VERSION=1.9.7
