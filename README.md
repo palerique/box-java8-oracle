@@ -37,3 +37,9 @@ build:
 ```
 
 More information http://sitedo.ph/
+
+Modifications: 
+---------------------
+
+0.0.8:
+  ADD: grunt, yo and grunt-cli
