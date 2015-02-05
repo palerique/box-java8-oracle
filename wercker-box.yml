@@ -1,5 +1,5 @@
 name: java8-oracle-nodejs
-version: 0.0.8
+version: 0.0.9
 inherits: wercker/ubuntu12.04-nodejs0.10@1.2.0
 type: main
 os: ubuntu@12.04
@@ -18,6 +18,7 @@ keywords:
   - selenium
   - firefox
   - xvfb
+  - heroku toolbelt
 packages:
   - nodejs@0.10.29
   - phantomjs@1.9.7
@@ -79,4 +80,7 @@ script: |-
 
   # Firefox webdriver and Xvfb
   sudo apt-get install -y xvfb firefox
+  
+  # Install Heroku toolbelt
+  wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 
